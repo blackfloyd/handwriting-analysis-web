@@ -1,0 +1,75 @@
+import React, { useState } from 'react';
+
+function App() {
+  const [file, setFile] = useState(null);
+  const [results, setResults] = useState(null);
+  const [loading, setLoading] = useState(false);
+
+  const uploadAndAnalyze = async () => {
+    if (!file) return;
+    setLoading(true);
+    const formData = new FormData();
+    formData.append('file', file);
+
+    try {
+      const response = await fetch('http://localhost:5000/analyze', {
+        method: 'POST',
+        body: formData,
+      });
+      const data = await response.json();
+      setResults(data);
+    } catch (error) {
+      console.error("Error analyzing image:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-50 flex flex-col items-center py-12 px-4">
+      <div className="max-w-2xl w-full bg-white rounded-xl shadow-lg p-8">
+        <header className="text-center mb-10">
+          <h1 className="text-3xl font-extrabold text-gray-900">GraphoAnalysis AI</h1>
+          <p className="text-gray-500 mt-2">Upload handwriting samples to uncover behavioral traits.</p>
+        </header>
+
+        {/* Upload Section */}
+        <div className="flex flex-col items-center justify-center border-2 border-dashed border-blue-200 rounded-lg p-10 bg-blue-50">
+          <input 
+            type="file" 
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"
+            onChange={(e) => setFile(e.target.files[0])} 
+          />
+          <button 
+            onClick={uploadAndAnalyze}
+            disabled={!file || loading}
+            className={`mt-6 w-full py-3 rounded-lg font-bold text-white transition-all ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 shadow-md hover:shadow-lg'}`}
+          >
+            {loading ? 'Processing Model...' : 'Start Analysis'}
+          </button>
+        </div>
+
+        {/* Results Section */}
+        {results && (
+          <div className="mt-10 animate-fade-in">
+            <h2 className="text-xl font-bold text-gray-800 mb-4 border-b pb-2">Personality Insights</h2>
+            <div className="grid grid-cols-1 gap-4">
+              {Object.entries(results).map(([trait, value]) => (
+                <div key={trait} className="flex justify-between p-4 bg-gray-50 rounded-lg border border-gray-100">
+                  <span className="font-medium text-gray-600">{trait}</span>
+                  <span className="font-bold text-blue-700">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      
+      <footer className="mt-8 text-gray-400 text-sm">
+        Powered by Deep Learning & Computer Vision
+      </footer>
+    </div>
+  );
+}
+
+export default App;
