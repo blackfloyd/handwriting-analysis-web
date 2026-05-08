@@ -18,7 +18,7 @@ def load_project_model():
         print("Model not found. Downloading from Google Drive...")
         # Replace the string below with your 52MB file's ID
         # Example ID looks like: 1A2B3C4D5E6F7G8H9I0J
-        file_id = 'https://drive.google.com/file/d/1cZrJ95I2bmDOrbwePfr8bFfQWsafpDRq/view?usp=drive_link' 
+        file_id = '1c7rJ95T2bmD0rbwaPfr8bfFQWsafp0Rq' 
         url = f'https://drive.google.com/uc?id={file_id}'
         gdown.download(url, model_path, quiet=False)
     
