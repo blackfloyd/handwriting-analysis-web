@@ -1,3 +1,17 @@
+import gdown
+import os
+
+def load_actual_model():
+    model_path = 'models.h5'
+    if not os.path.exists(model_path):
+        # Replace with your File ID from the Google Drive share link
+        file_id = 'YOUR_GOOGLE_DRIVE_FILE_ID'
+        url = f'https://drive.google.com/uc?id={file_id}'
+        gdown.download(url, model_path, quiet=False)
+    
+    return tf.keras.models.load_model(model_path)
+
+model = load_actual_model()
 from flask import Flask, request, jsonify, render_template_string
 from flask_cors import CORS
 import cv2
