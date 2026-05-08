@@ -1,7 +1,7 @@
 flask
 flask-cors
 opencv-python-headless
-numpy
+numpy<2.0.0
 gunicorn
-tensorflow
+tensorflow-cpu
 scikit-learn
